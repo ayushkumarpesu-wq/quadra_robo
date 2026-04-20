@@ -1,72 +1,77 @@
-# Quadruped Robot ROS2 Project
+# MAR Quadrupled Robot (Quadra Robot)
 
-This project provides a ROS 2 (Humble) and Gazebo Classic simulation for a quadruped robot, including control, teleoperation, and simulation packages.
+A quadruped robot simulation using ROS2 Humble and Gazebo.
 
 ## Features
-- Modular ROS 2 packages for robot control, simulation, and teleoperation
-- Inverse kinematics and gait generation for walking
-- Keyboard teleoperation (W/A/S/D/X keys)
-- Gazebo Classic simulation integration
+- Full quadruped robot simulation in Gazebo
+- Keyboard teleoperation (W/A/S/D/X)
+- Gamepad teleoperation support
+- Inverse Kinematics based motion control
+- ROS2 Control integration with ForwardCommandController
 
-## Packages Overview
-- **hyperdog_msgs**: Custom message definitions for robot control
-- **hyperdog_ctrl**: Main control logic, including body motion and gait planning
-- **hyperdog_teleop**: Teleoperation nodes (gamepad and keyboard)
-- **hyperdog_gazebo_sim**: Gazebo Classic simulation files and launch scripts
-- **hyperdog_launch**: Launch files to start the full robot stack
+## Requirements
+- Ubuntu 22.04
+- ROS2 Humble
+- Gazebo 11
+- ros-humble-gazebo-ros2-control
+- ros-humble-ros2-control
+- ros-humble-ros2-controllers
 
-## Quick Start
-
-### 1. Build the Workspace
+## Setup
 ```bash
 mkdir -p ~/hyperdog_ws/src
 cd ~/hyperdog_ws/src
-# Copy or clone this repository here
+git clone https://github.com/ayushkumarpesu-wq/MAR_Quadrupled_Robo.git
 cd ~/hyperdog_ws
 rosdep install --from-paths src --ignore-src -r -y
 colcon build
 source install/setup.bash
 ```
 
-### 2. Launch the Robot in Gazebo
+## Launch Simulation
+Terminal 1 - Launch Gazebo:
 ```bash
+source /opt/ros/humble/setup.bash && source ~/hyperdog_ws/install/setup.bash
 ros2 launch hyperdog_gazebo_sim hyperdog_gazebo_sim.launch.py
 ```
 
-### 3. Launch the Robot Control Stack
+Terminal 2 - Load Controllers (wait 25s after Gazebo loads):
 ```bash
+source /opt/ros/humble/setup.bash && source ~/hyperdog_ws/install/setup.bash
+ros2 run controller_manager spawner joint_state_broadcaster
+ros2 run controller_manager spawner gazebo_joint_controller
+```
+
+Terminal 3 - Stand pose:
+```bash
+ros2 topic pub /gazebo_joint_controller/commands std_msgs/msg/Float64MultiArray \
+"data: [0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]" --rate 50
+```
+
+Terminal 4 - Launch control stack:
+```bash
+source /opt/ros/humble/setup.bash && source ~/hyperdog_ws/install/setup.bash
 ros2 launch hyperdog_launch hyperdog.launch.py
 ```
 
-### 4. Teleoperate the Robot
-#### Keyboard (W/A/S/D/X):
+Terminal 5 - Keyboard teleop:
 ```bash
+source /opt/ros/humble/setup.bash && source ~/hyperdog_ws/install/setup.bash
 ros2 run hyperdog_teleop keyboard_teleop.py
 ```
-- **W**: Forward
-- **S**: Backward
-- **A**: Left
-- **D**: Right
-- **X**: Stop
 
-#### Gamepad:
-- Connect a supported gamepad and use the default teleop node.
+## Controls
+- W: Forward
+- S: Backward  
+- A: Left
+- D: Right
+- X: Stop / Rest pose
+- Ctrl+C: Quit
 
-## Robot Behavior
-- On startup, the robot spawns in Gazebo and stands at a safe height.
-- Use teleop (keyboard or gamepad) to make the robot walk in any direction.
-- Press 'X' to stop and make the robot return to a rest pose.
-
-## Troubleshooting
-- Ensure all dependencies are installed with `rosdep`.
-- If the robot does not move, check that all nodes are running and topics are being published.
-- For simulation issues, verify Gazebo Classic is installed and sourced.
-
-## Customization
-- Adjust standing/rest heights in cmd_manager_node.py and body_motion_planner.py as needed.
-- Modify gait parameters in `hyperdog_ctrl` for different walking styles.
-
-## License
-This project is for educational use. Replace or update this section as needed.
-
----
+## Package Structure
+- Quadra_ctrl - Control nodes (cmd_manager, IK_node)
+- Quadra_gazebo_sim - Gazebo simulation
+- Quadra_launch - Launch files
+- Quadra_msgs - Custom messages
+- Quadra_teleop - Teleoperation nodes
+EOF
