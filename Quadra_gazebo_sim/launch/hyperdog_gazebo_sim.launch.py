@@ -3,7 +3,7 @@ import os
 from black import out
 from launch import LaunchDescription
 from ament_index_python.packages import get_package_share_directory
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, TimerAction, IncludeLaunchDescription, ExecuteProcess, RegisterEventHandler
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PythonExpression
@@ -11,13 +11,8 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch.event_handlers import OnProcessExit
 
-import xacro
-
-# configure robot's urdf file
-pkg_hyperdog_gazebo = 'hyperdog_gazebo_sim'
-robot_description_subpath = 'description/hyperdog.urdf.xacro'
-xacro_file = os.path.join(get_package_share_directory(pkg_hyperdog_gazebo),robot_description_subpath)
-robot_description_raw = xacro.process_file(xacro_file).toxml()
+# Load pre-generated URDF without XML declaration
+robot_description_raw = open('/tmp/hyperdog.urdf').read()
 
 #configure gazebo
 pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros') 
@@ -67,7 +62,7 @@ def generate_launch_description():
     default_value='empty.world',#world_path,
     description='Full path to the world model file to load')
 
-  declare_robot_state_publisher = Node(
+  robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
@@ -82,16 +77,22 @@ def generate_launch_description():
     
   spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py', 
                     arguments=['-topic', 'robot_description',
-                               '-entity', 'HyperDog'],
+                               '-entity', 'HyperDog',
+                               '-x', '0.0',
+                               '-y', '0.0', 
+                               '-z', '0.5',
+                               '-R', '0.0',
+                               '-P', '0.0',
+                               '-Y', '0.0'],
                     output='screen')
 
   load_joint_state_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'start',
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
             'joint_state_broadcaster'],
         output='screen' )
   
   laod_forward_command_controller = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'start', 
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active', 
             'gazebo_joint_controller'],
         output='screen'
     )
@@ -134,8 +135,8 @@ def generate_launch_description():
     start_gazebo_server_cmd,
     start_gazebo_client_cmd,
 
-    spawn_entity,
-    declare_robot_state_publisher,
+    TimerAction(period=5.0, actions=[spawn_entity]),
+    robot_state_publisher,
     # load_joint_state_controller,
     # laod_forward_command_controller,
     hyperdog_gz_joint_ctrl_node,

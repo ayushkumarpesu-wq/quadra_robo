@@ -1,23 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-    
-<!-- ************* JOINT CONTROLLER GAZEBO PLUGIN ************** -->
-
-    <!-- 
-    _____________________________________________________________________
-        include this file into: /description/hyperdog.urdf.xacro 
-        using following line: 
-                    <xacro:include filename="gazebo_ros2_control_plugin.xacro" /> 
-    _____________________________________________________________________ -->
-
-
-
-    <!-- CONFIGURE JOINTS OF THE ROBOT -->
     <ros2_control name="GazeboSystem" type="System">
         <hardware>
             <plugin>gazebo_ros2_control/GazeboSystem</plugin>
         </hardware>
-
         <joint name="FR_hip_joint">
             <command_interface name="position">
                 <param name="min">-1.57</param>
@@ -29,7 +15,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="FR_uleg_joint">
             <command_interface name="position">
                 <param name="min">-1.2217</param>
@@ -41,7 +26,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="FR_lleg_joint">
             <command_interface name="position">
                 <param name="min">0.45</param>
@@ -53,7 +37,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="FL_hip_joint">
             <command_interface name="position">
                 <param name="min">-1.57</param>
@@ -65,7 +48,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="FL_uleg_joint">
             <command_interface name="position">
                 <param name="min">-1.2217</param>
@@ -77,7 +59,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-        
         <joint name="FL_lleg_joint">
             <command_interface name="position">
                 <param name="min">0.45</param>
@@ -89,7 +70,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="BR_hip_joint">
             <command_interface name="position">
                 <param name="min">-1.57</param>
@@ -101,7 +81,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="BR_uleg_joint">
             <command_interface name="position">
                 <param name="min">-1.2217</param>
@@ -113,7 +92,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="BR_lleg_joint">
             <command_interface name="position">
                 <param name="min">0.45</param>
@@ -125,7 +103,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="BL_hip_joint">
             <command_interface name="position">
                 <param name="min">-1.57</param>
@@ -137,7 +114,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="BL_uleg_joint">
             <command_interface name="position">
                 <param name="min">-1.2217</param>
@@ -149,7 +125,6 @@
             <state_interface name="velocity"/>
             <state_interface name="effort"/>
         </joint>
-
         <joint name="BL_lleg_joint">
             <command_interface name="position">
                 <param name="min">0.45</param>
@@ -162,13 +137,11 @@
             <state_interface name="effort"/>
         </joint>
     </ros2_control>
-
-    <!--  CONFIGURE THE GAZEBO PLUGIN -->
     <gazebo>
         <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
           <parameters>$(find hyperdog_gazebo_sim)/config/hyperdog_joint_controller.yaml</parameters>
+          <robot_param>robot_description</robot_param>
+          <robot_param_node>robot_state_publisher</robot_param_node>
         </plugin>
     </gazebo>
-
-
 </robot> 

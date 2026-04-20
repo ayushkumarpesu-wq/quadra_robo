@@ -17,6 +17,7 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(trajectory_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
@@ -32,6 +33,7 @@ ament_target_dependencies(hyperdog_teleop_joy_node
   std_msgs 
   hyperdog_msgs
   geometry_msgs
+  trajectory_msgs
 )
 
 
@@ -47,4 +49,8 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(PROGRAMS
+  scripts/keyboard_teleop.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 ament_package()

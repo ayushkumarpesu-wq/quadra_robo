@@ -1,22 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-
-<!-- 
-    * Autor: nipun.dhananjaya@gmail.com
-    * Date:  13.03.2023
-
-
-    _____________________________________________________________________
-        include this file into: /description/hyperdog.urdf.xacro 
-        using following line: 
-                    <xacro:include filename="hyperdog_urdf_links.xacro" /> 
-    _____________________________________________________________________ -->
-
     <xacro:include filename="consts.xacro" /> 
     <xacro:include filename="physics.xacro" /> 
-
-
-    <!-- load meshes -->
     <xacro:macro name="body_mesh">
         <mesh filename="file://$(find hyperdog_gazebo_sim)/meshes/body.stl" scale="0.001 0.001 0.001"/>
     </xacro:macro>
@@ -35,19 +20,12 @@
     <xacro:macro name="lleg_mesh">
         <mesh filename="file://$(find hyperdog_gazebo_sim)/meshes/LLEG.stl" scale="0.001 0.001 0.001"/>
     </xacro:macro>
-   
-
-
-    <!-- *********** Inertial link *********** -->
     <link name="inertial_link">
         <xacro:inertial_body></xacro:inertial_body>
     </link>
-
-
-    <!-- *********** base link *********** -->
     <link name="base_link">
         <visual>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <origin xyz="0 0 0" rpy="3.14159 0 0"/>
             <geometry>
                 <xacro:body_mesh></xacro:body_mesh>
             </geometry>
@@ -61,13 +39,7 @@
                 <xacro:body_mesh></xacro:body_mesh>
             </geometry>
         </collision>
-        
     </link>
-
-
-    <!-- !!!!!!!!!!!!!!!!!!!!!!! HIPS !!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-
-    <!-- *********** FR_hip *********** -->
     <link name="FR_hip_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -86,7 +58,6 @@
         </collision>
         <xacro:inertial_right_hip></xacro:inertial_right_hip>
     </link>
-    <!-- *********** FL_hip ********** -->
     <link name="FL_hip_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -105,7 +76,6 @@
         </collision>
         <xacro:inertial_left_hip></xacro:inertial_left_hip>
     </link>
-    <!-- *********** BR_hip ********** -->
     <link name="BR_hip_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -124,7 +94,6 @@
         </collision>
         <xacro:inertial_right_hip></xacro:inertial_right_hip>
     </link>
-    <!-- *********** BL_hip ********** -->
     <link name="BL_hip_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -143,11 +112,6 @@
         </collision>
         <xacro:inertial_left_hip></xacro:inertial_left_hip>
     </link>
-
-
-    <!-- !!!!!!!!!!!!!!!!!!!!!!! ULEGs !!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-
-    <!-- *********** FR_uleg ********** -->
     <link name="FR_uleg_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -166,7 +130,6 @@
         </collision>
         <xacro:inertial_right_uleg></xacro:inertial_right_uleg>
     </link>
-    <!-- *********** FL_uleg ********** -->
     <link name="FL_uleg_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -185,7 +148,6 @@
         </collision>
         <xacro:inertial_left_uleg></xacro:inertial_left_uleg>
     </link>
-    <!-- *********** BR_uleg ********** -->
     <link name="BR_uleg_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -204,7 +166,6 @@
         </collision>
         <xacro:inertial_right_uleg></xacro:inertial_right_uleg>
     </link>
-    <!-- *********** BL_uleg ********** -->
     <link name="BL_uleg_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -223,11 +184,6 @@
         </collision>
         <xacro:inertial_left_uleg></xacro:inertial_left_uleg>
     </link>
-
-
-    <!-- !!!!!!!!!!!!!!!!!!!!!!! LLEGs !!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-
-    <!-- *********** FR_lleg ********** -->
     <link name="FR_lleg_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -246,7 +202,6 @@
         </collision>
         <xacro:inertial_right_lleg></xacro:inertial_right_lleg>
     </link>
-    <!-- *********** FL_lleg ********** -->
     <link name="FL_lleg_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -264,9 +219,7 @@
             </geometry>
         </collision>
         <xacro:inertial_left_lleg></xacro:inertial_left_lleg>
-
     </link>
-      <!-- *********** BR_lleg ********** -->
     <link name="BR_lleg_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -284,9 +237,7 @@
             </geometry>
         </collision>
         <xacro:inertial_right_lleg></xacro:inertial_right_lleg>
-
     </link>
-    <!-- *********** BL_lleg ********** -->
     <link name="BL_lleg_link">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -305,12 +256,6 @@
         </collision>
         <xacro:inertial_left_lleg></xacro:inertial_left_lleg>
     </link>
-
-
-
-    <!-- !!!!!!!!!!!!!!!!!!!!!!! FEET !!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-
-    <!-- *********** FL FOOT ********** -->
     <link name="FL_foot">
         <visual>
           <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -336,7 +281,6 @@
         </collision>
         <xacro:inertial_foot></xacro:inertial_foot>
       </link>
-    <!-- *********** FR FOOT ********** -->
     <link name="FR_foot">
         <visual>
           <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -362,7 +306,6 @@
         </collision>
         <xacro:inertial_foot></xacro:inertial_foot>
       </link>
-    <!-- *********** BR FOOT ********** -->
     <link name="BR_foot">
         <visual>
           <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -388,7 +331,6 @@
         </collision>
         <xacro:inertial_foot></xacro:inertial_foot>
       </link>
-    <!-- *********** BL FOOT ********** -->
     <link name="BL_foot">
         <visual>
           <origin rpy="0 0 0" xyz="0.0 0 0"/>
@@ -414,5 +356,4 @@
         </collision>
         <xacro:inertial_foot></xacro:inertial_foot>
       </link>
-
 </robot>
